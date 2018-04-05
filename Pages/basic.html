@@ -53,41 +53,44 @@
 	<script language="JavaScript">
 		function take_snapshot() {
 			var settings = {};
-
 			// take snapshot and get image data
 			Webcam.snap( function(data_uri) {
 				// display results in page
 				document.getElementById('results').innerHTML = 
 					'<h2>Here is your image:</h2>' + 
 					'<img src="'+data_uri+'"/>';
-
 				var image = data_uri.replace(/^data:image\/(png|jpeg|jpg);base64,/, "");
-
 				console.log(image);
-
+				
 				settings = {
-					"async": false,
+					"async": true,
 					"crossDomain": true,
-					"data": {'img': image},
+					"data": image,
 					"dataType": "json",
-					"processData": false,
-					"url": "http://localhost/API/Home/ProcessarImagem",
-					"method": "POST",
-					"headers": {
-						"Cache-Control": "no-cache",
-						"Postman-Token": "ebc472b2-e4f0-4f9e-9566-8296a1f10559"
-					}
+					"processData": true,
+					"url": "http://localhost:56242/Home/ProcessarImagemAsync",
+					"method": "POST"
+					// "headers": {
+					// 	"Cache-Control": "no-cache",
+					// 	"Postman-Token": "ebc472b2-e4f0-4f9e-9566-8296a1f10559"
+					// }
 				}
-
 				//Log
 				console.log(settings);
-
 			} );
-
 			$.ajax(settings).done(function (response) {
 				console.log(response);
 			});
-		}
+			
+
+			if (Request == null ){
+				console.log("Request é nulo!!");
+			}else{
+				console.log("Request tá ok");
+			}
+			
+}
+
 	</script>
 	
 </body>
