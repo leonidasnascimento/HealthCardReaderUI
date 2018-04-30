@@ -1,0 +1,29 @@
+.bradesco{
+    display: flex;
+    justify-content: space-between;
+    margin-left: 200px;
+}
+.sendImage{
+    width: 115px;
+    height: 23px;
+    margin-top: 100px;
+    margin-left: -124px;
+}
+
+.inputjson{
+    width: 32%;
+    margin-right: 80px;
+    height: 180px;
+    margin-top: 22px;
+}
+
+.sulamerica{
+    display: flex;
+    margin-left: 200px;
+    justify-content: space-between;
+}
+
+.fotosulamerica{
+    width: 320px;
+    height: 238px;
+}
