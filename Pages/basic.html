@@ -14,7 +14,9 @@
 	</style>
 	<link href="style.css" rel="stylesheet">
 </head>
+
 <body>
+		
 	<table>
 		<tr>
 			<td>
@@ -45,7 +47,8 @@
 	<br>
 	<br>
 	<section class="sulamerica">
-		<img src="src/sulamerica.jpeg" alt="" class="image_sulamerica" >
+		
+		<img src="src/sulamerica.jpeg" alt="" id="image_sulamerica">
 		<button class="sendImage" onClick="get_imageSulamerica()">Enviar imagem</button>
 		<input type="text" name="" class="inputjson" >
 	</section>
@@ -53,6 +56,7 @@
 	<!-- First, include the Webcam.js JavaScript Library -->
 	<script type="text/javascript" src="../webcam.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	
 	
 	<!-- Configure a few settings and attach camera -->
 	<script language="JavaScript">
@@ -101,7 +105,8 @@
 		//  Code to get Bradesco's image and send it to Backend
 		function get_imageBradesco() {
 			var settings = {};
-			var imgBase64 = get_base64FromImageTag('image_bradesco');
+			var bradescoImage = document.getElementById("image_bradesco").src;
+			var imgBase64 = get_base64FromImageTag(bradescoImage);
 			var image = imgBase64.replace(/^data:image\/(png|jpeg|jpg);base64,/, "");
 			
 			settings = {
@@ -113,7 +118,10 @@
 				"url": "http://localhost:56242/Home/ProcessarImagemAsync",
 				"method": "POST"
 			}
-
+		
+			console.log(image);
+			console.log(settings);
+			
 			$.ajax(settings).done(function (response) {
 				console.log(response);
 			});
@@ -121,7 +129,8 @@
 		//  Code to get SulAmerica's image and send it to Backend
 		function get_imageSulamerica() {
 			var settings = {};
-			var imgBase64 = get_base64FromImageTag('image_sulamerica');
+			var sulamericaImage = document.getElementById("image_sulamerica").src;
+			var imgBase64 = get_base64FromImageTag(sulamericaImage);
 			var image = imgBase64.replace(/^data:image\/(png|jpeg|jpg);base64,/, "");
 			
 			settings = {
@@ -133,7 +142,10 @@
 				"url": "http://localhost:56242/Home/ProcessarImagemAsync",
 				"method": "POST"
 			}
-
+			console.log(image);
+			
+			console.log(settings);
+			
 			$.ajax(settings).done(function (response) {
 				console.log(response);
 			});
@@ -142,19 +154,27 @@
 		function get_base64FromImageTag(imgTagName)
 		{
 			var imgFromHtml = document.getElementById(imgTagName);
-			var canvas = document.createElement('canvas');
+			//var canvas = document.createElement('canvas');
+			//var teste = any;//canvas.toDataURL();
+
+			var aLink = document.createElement('a');
+                var evt = document.createEvent("HTMLEvents");
+                evt.initEvent("click");
+                aLink.download = imgFromHtml;
+                //aLink.href = teste;
+                aLink.dispatchEvent(evt);
 
 			
+			// canvas.width = imgFromHtml.naturalWidth;
+			// canvas.height = imgFromHtml.naturalHeight;
+			// canvas.getContext('2d').drawImage(imgFromHtml, 0,0);
+			// imgFromHtml.crossOrigin = "Anonymous";
 			
-			canvas.width = imgFromHtml.naturalWidth;
-			canvas.height = imgFromHtml.naturalHeight;
-			canvas.getContext('2d').drawImage(imgFromHtml, 0,0);
-			imgFromHtml.crossOrigin = "Anonymous";
 			
-			console.log(canvas.toDataURL());
-
-			return canvas.toDataURL();
+			return imgTagName;
+			
 		}
+		
 
 	</script>
 </body>
