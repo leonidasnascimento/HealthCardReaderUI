@@ -39,16 +39,14 @@
 	</table>
 
 	<section class="bradesco">
-		<img src="src/bradesco.png" alt="" id="image_bradesco">
+		<img src="https://ccastorage.blob.core.windows.net/99-temp/bradesco.png?st=2018-05-03T13%3A09%3A15Z&se=2999-05-04T13%3A09%3A00Z&sp=rl&sv=2017-04-17&sr=b&sig=qqDK%2B4J%2FVQYIlPyAU5bN0YNk6yNWbaD%2BB9bZxgWu8HU%3D" alt="" id="image_bradesco">
 		<button class="sendImage" onClick="get_imageBradesco()">Enviar imagem</button>
 		<input type="text" name="" class="inputjson" >
-		
 	</section>
 	<br>
 	<br>
 	<section class="sulamerica">
-		
-		<img src="src/sulamerica.jpeg" alt="" id="image_sulamerica">
+		<img src="https://ccastorage.blob.core.windows.net/99-temp/sulamerica.jpeg?st=2018-05-03T13%3A09%3A15Z&se=2999-05-04T13%3A09%3A00Z&sp=rl&sv=2017-04-17&sr=b&sig=aBskM%2F83utrixmjK8OdpB9pJiuEt6H%2Fc3ZM9tdF8lAU%3D" alt="" id="image_sulamerica">
 		<button class="sendImage" onClick="get_imageSulamerica()">Enviar imagem</button>
 		<input type="text" name="" class="inputjson" >
 	</section>
@@ -56,7 +54,7 @@
 	<!-- First, include the Webcam.js JavaScript Library -->
 	<script type="text/javascript" src="../webcam.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	
+	<script src="https://gist.github.com/HereChen/e173c64090bea2e2fa51.js"></script>
 	
 	<!-- Configure a few settings and attach camera -->
 	<script language="JavaScript">
@@ -106,76 +104,36 @@
 		function get_imageBradesco() {
 			var settings = {};
 			var bradescoImage = document.getElementById("image_bradesco").src;
-			var imgBase64 = get_base64FromImageTag(bradescoImage);
-			var image = imgBase64.replace(/^data:image\/(png|jpeg|jpg);base64,/, "");
 			
-			settings = {
-				"async": true,
-				"crossDomain": true,
-				"data": { 'image' : image },
-				"dataType": "json",
-				"processData": true,
-				"url": "http://localhost:56242/Home/ProcessarImagemAsync",
-				"method": "POST"
-			}
-		
-			console.log(image);
-			console.log(settings);
-			
-			$.ajax(settings).done(function (response) {
-				console.log(response);
-			});
+			ProcessImageFromUrl(bradescoImage);
 		}
 		//  Code to get SulAmerica's image and send it to Backend
 		function get_imageSulamerica() {
 			var settings = {};
 			var sulamericaImage = document.getElementById("image_sulamerica").src;
-			var imgBase64 = get_base64FromImageTag(sulamericaImage);
-			var image = imgBase64.replace(/^data:image\/(png|jpeg|jpg);base64,/, "");
-			
+
+			ProcessImageFromUrl(sulamericaImage);
+		}	
+
+		function ProcessImageFromUrl(imgUrl)
+		{
 			settings = {
 				"async": true,
 				"crossDomain": true,
-				"data": { 'image' : image },
+				"data": { 'imageUrl' : imgUrl },
 				"dataType": "json",
 				"processData": true,
-				"url": "http://localhost:56242/Home/ProcessarImagemAsync",
+				"url": "http://localhost:56242/Home/GetImageFromUrl",
 				"method": "POST"
 			}
-			console.log(image);
-			
+
+			console.log(imgUrl);
 			console.log(settings);
 			
 			$.ajax(settings).done(function (response) {
 				console.log(response);
 			});
-		}	
-		//  Code to get the Base64 from Bradesco's and SulAmerica's images
-		function get_base64FromImageTag(imgTagName)
-		{
-			var imgFromHtml = document.getElementById(imgTagName);
-			//var canvas = document.createElement('canvas');
-			//var teste = any;//canvas.toDataURL();
-
-			var aLink = document.createElement('a');
-                var evt = document.createEvent("HTMLEvents");
-                evt.initEvent("click");
-                aLink.download = imgFromHtml;
-                //aLink.href = teste;
-                aLink.dispatchEvent(evt);
-
-			
-			// canvas.width = imgFromHtml.naturalWidth;
-			// canvas.height = imgFromHtml.naturalHeight;
-			// canvas.getContext('2d').drawImage(imgFromHtml, 0,0);
-			// imgFromHtml.crossOrigin = "Anonymous";
-			
-			
-			return imgTagName;
-			
 		}
-		
-
 	</script>
 </body>
 </html>
