@@ -27,3 +27,17 @@
     width: 320px;
     height: 238px;
 }
+.cardInfos{
+    margin-left: 60%;
+}
+.list{
+    display: flex;
+    justify-content: space-between;
+    padding-right: 136px;
+}
+ul {
+    list-style-type:none
+}
+.inputCardInfos{
+    margin: 2px;
+}

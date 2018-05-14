@@ -37,24 +37,57 @@
 			</td>
 		</tr>	
 	</table>
-
-	<section class="bradesco">
-		<img src="https://ccastorage.blob.core.windows.net/99-temp/bradesco.png?st=2018-05-03T13%3A09%3A15Z&se=2999-05-04T13%3A09%3A00Z&sp=rl&sv=2017-04-17&sr=b&sig=qqDK%2B4J%2FVQYIlPyAU5bN0YNk6yNWbaD%2BB9bZxgWu8HU%3D" alt="" id="image_bradesco">
-		<button class="sendImage" onClick="get_imageBradesco()">Enviar imagem</button>
-		<input type="text" name="" class="inputjson" >
-	</section>
-	<br>
-	<br>
-	<section class="sulamerica">
-		<img src="https://ccastorage.blob.core.windows.net/99-temp/sulamerica.jpeg?st=2018-05-03T13%3A09%3A15Z&se=2999-05-04T13%3A09%3A00Z&sp=rl&sv=2017-04-17&sr=b&sig=aBskM%2F83utrixmjK8OdpB9pJiuEt6H%2Fc3ZM9tdF8lAU%3D" alt="" id="image_sulamerica">
-		<button class="sendImage" onClick="get_imageSulamerica()">Enviar imagem</button>
-		<input type="text" name="" class="inputjson" >
-	</section>
-	
+    <section class="cardInfos">
+        <ul>
+            <div class="list" class="inputCardInfos">
+            <li>
+                Nome:
+            </li>
+            <input type="text" name="" class="inputCardInfos" id="valueJsonName">
+            </div>  
+            <div class="list">
+            <li>
+                Número do Cartão:
+            </li>
+            <input type="text" class="inputCardInfos" id="valueJsonCardNumber">
+            </div>  
+            <div class="list">
+            <li>
+                Data de Validade: 
+            </li>
+            <input type="text" class="inputCardInfos" id="valueJsonValidDate">
+            </div>
+            <div class="list">
+            <li>
+               Plano:
+            </li>
+            <input type="text" class="inputCardInfos" id="valueJsonHealthInsurance">
+            </div>
+            <div class="list">
+            <li>
+                Convênio:
+            </li>
+            <input type="text" class="inputCardInfos" id="valueJsonLogo">
+            </div>
+            <div class="list">
+            <li>
+                Empresa:
+            </li>
+            <input type="text" class="inputCardInfos" id="valueJsonCompany">
+            </div>
+            <div class="list">
+            <li>
+                Eligibilidades:
+            </li>
+            <input type="text" class="inputCardInfos" id="valueJsonEligibilities">
+            </div>
+        </ul>
+    </section>
+        
 	<!-- First, include the Webcam.js JavaScript Library -->
 	<script type="text/javascript" src="../webcam.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<script src="https://gist.github.com/HereChen/e173c64090bea2e2fa51.js"></script>
+
 	
 	<!-- Configure a few settings and attach camera -->
 	<script language="JavaScript">
@@ -98,42 +131,20 @@
 
 			$.ajax(settings).done(function (response) {
 				console.log(response);
+
+		
+			document.getElementById("valueJsonName").value = JSON.stringify(response["Name"]);
+			document.getElementById("valueJsonCardNumber").value = JSON.stringify(response["CardNumber"]);
+			document.getElementById("valueJsonValidDate").value = JSON.stringify(response["ExpirationDate"]);
+			document.getElementById("valueJsonHealthInsurance").value = JSON.stringify(response["HealthInsurance"]);
+			document.getElementById("valueJsonLogo").value = JSON.stringify(response["Logo"]);
+			document.getElementById("valueJsonCompany").value = JSON.stringify(response["Company"]);
+			document.getElementById("valueJsonEligibilities").value = JSON.stringify(response["Eligibilities"]);
+							
+						
 			});	
 		}
-		//  Code to get Bradesco's image and send it to Backend
-		function get_imageBradesco() {
-			var settings = {};
-			var bradescoImage = document.getElementById("image_bradesco").src;
-			
-			ProcessImageFromUrl(bradescoImage);
-		}
-		//  Code to get SulAmerica's image and send it to Backend
-		function get_imageSulamerica() {
-			var settings = {};
-			var sulamericaImage = document.getElementById("image_sulamerica").src;
-
-			ProcessImageFromUrl(sulamericaImage);
-		}	
-
-		function ProcessImageFromUrl(imgUrl)
-		{
-			settings = {
-				"async": true,
-				"crossDomain": true,
-				"data": { 'imageUrl' : imgUrl },
-				"dataType": "json",
-				"processData": true,
-				"url": "http://localhost:56242/Home/GetImageFromUrl",
-				"method": "POST"
-			}
-
-			console.log(imgUrl);
-			console.log(settings);
-			
-			$.ajax(settings).done(function (response) {
-				console.log(response);
-			});
-		}
+		
 	</script>
 </body>
 </html>
