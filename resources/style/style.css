@@ -25,7 +25,8 @@
 }
 
 .cardInfos {
-    margin-left: 1%;
+    margin-left: 0;
+    padding-left: 0;
 }
 
 .list {
@@ -39,7 +40,8 @@
 }
 
 ul {
-    list-style-type: none
+    list-style-type: none;
+    padding-left: 0%;
 }
 
 body {
@@ -67,12 +69,12 @@ form>input {
     background: #ccc;
 }
 
-#imageDiv{
+#imageDiv {
     float: left;
-    width: 50%;    
+    width: 50%;
 }
 
-#resultDiv{
+#resultDiv {
     float: right;
     width: 50%;
     text-align: left;
@@ -84,7 +86,10 @@ form>input {
     padding-right: 15%;
     padding-top: 5%;
     padding-bottom: 5%;
-    height: 70%
+    height: 70%;
+    position: relative;
+    height: 300px;
+    border: 1px solid black;
 }
 
 #image_sulamerica {
@@ -92,14 +97,13 @@ form>input {
     height: 238px;
 }
 
-#infoDiv{
+#infoDiv {
     width: 100%;
-    position: relative;    
 }
 
-#commandTools{
+#commandTools {
     width: 100%;
     position: absolute;
-    bottom: 0;  
+    left: 0;
+    bottom: 0;
 }
-
