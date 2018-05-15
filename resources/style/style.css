@@ -80,7 +80,12 @@ form>input {
     text-align: left;
 }
 
-#mainDiv {
+#image_sulamerica {
+    width: 320px;
+    height: 238px;
+}
+
+/* #mainDiv {
     width: 70%;
     padding-left: 15%;
     padding-right: 15%;
@@ -92,11 +97,6 @@ form>input {
     border: 1px solid black;
 }
 
-#image_sulamerica {
-    width: 320px;
-    height: 238px;
-}
-
 #infoDiv {
     width: 100%;
 }
@@ -106,4 +106,18 @@ form>input {
     position: absolute;
     left: 0;
     bottom: 0;
+} */
+
+#mainDiv,
+#infoDiv,
+#commandTools {
+    position: relative;
+    margin-top: 10px;
+    display: inline-block;
+}
+
+#infoDiv,
+#commandTools {
+    width: 100%;
+    clear: both;
 }
