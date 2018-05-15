@@ -1,94 +1,93 @@
 <!doctype html>
 
 <html lang="en">
+
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title>WebcamJS Test Page</title>
-	<style type="text/css">
-		body { font-family: Helvetica, sans-serif; }
-		h2, h3 { margin-top:0; }
-		form { margin-top: 15px; }
-		form > input { margin-right: 15px; }
-		#results { float:right; margin:20px; padding:20px; border:1px solid; background:#ccc; }
-		
-	</style>
-	<link href="style.css" rel="stylesheet">
+	<title>Elegibilidade</title>
+	<link href="../resources/style/style.css" rel="stylesheet">
+	<link rel="icon" href="../resources/ico/acc.png">
 </head>
 
 <body>
-		
-	<table>
-		<tr>
-			<td>
-				<div id="my_camera"></div>
-				
-				<!-- A button for taking snaps -->
-				<form>
-					<input type=button value="Take Snapshot" onClick="take_snapshot()">
-				</form>
-			</td>
-			<td>	
-				<div id="results">Your captured image will appear here...</div>	
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<div id="resultadoElegibilidade">				
-			</td>
-		</tr>	
-	</table>
-    <section class="cardInfos">
-        <ul>
-            <div class="list" class="inputCardInfos">
-            <li>
-                Nome:
-            </li>
-            <input type="text" name="" class="inputCardInfos" id="valueJsonName">
-            </div>  
-            <div class="list">
-            <li>
-                Número do Cartão:
-            </li>
-            <input type="text" class="inputCardInfos" id="valueJsonCardNumber">
-            </div>  
-            <div class="list">
-            <li>
-                Data de Validade: 
-            </li>
-            <input type="text" class="inputCardInfos" id="valueJsonValidDate">
-            </div>
-            <div class="list">
-            <li>
-               Plano:
-            </li>
-            <input type="text" class="inputCardInfos" id="valueJsonHealthInsurance">
-            </div>
-            <div class="list">
-            <li>
-                Convênio:
-            </li>
-            <input type="text" class="inputCardInfos" id="valueJsonLogo">
-            </div>
-            <div class="list">
-            <li>
-                Empresa:
-            </li>
-            <input type="text" class="inputCardInfos" id="valueJsonCompany">
-            </div>
-            <div class="list">
-            <li>
-                Eligibilidades:
-            </li>
-            <input type="text" class="inputCardInfos" id="valueJsonEligibilities">
-            </div>
-        </ul>
-    </section>
-        
+	<div id="mainDiv">
+		<div id="infoDiv">
+			<div id="imageDiv">
+				<div id="camDiv" style="display: none">
+					<div id="my_camera"></div>
+
+					<!-- A button for taking snaps -->
+					<form>
+						<input type=button value="Take Snapshot" onClick="take_snapshot()">
+					</form>
+				</div>
+				<div id="results">Sua imagem aparecerá aqui...</div>
+			</div>
+			<div id="resultDiv">
+				<section class="cardInfos">
+					<ul>
+						<div class="list" class="inputCardInfos">
+							<li>
+								Nome:
+							</li>
+							<input type="text" name="" class="inputCardInfos" id="valueJsonName">
+						</div>
+						<div class="list">
+							<li>
+								Número do Cartão:
+							</li>
+							<input type="text" class="inputCardInfos" id="valueJsonCardNumber">
+						</div>
+						<div class="list">
+							<li>
+								Data de Validade:
+							</li>
+							<input type="text" class="inputCardInfos" id="valueJsonValidDate">
+						</div>
+						<div class="list">
+							<li>
+								Plano:
+							</li>
+							<input type="text" class="inputCardInfos" id="valueJsonHealthInsurance">
+						</div>
+						<div class="list">
+							<li>
+								Convênio:
+							</li>
+							<input type="text" class="inputCardInfos" id="valueJsonLogo">
+						</div>
+						<div class="list">
+							<li>
+								Empresa:
+							</li>
+							<input type="text" class="inputCardInfos" id="valueJsonCompany">
+						</div>
+						<div class="list">
+							<li>
+								Eligibilidades:
+							</li>
+							<input type="text" class="inputCardInfos" id="valueJsonEligibilities">
+						</div>
+					</ul>
+				</section>
+			</div>
+		</div>
+		<div id="commandTools">
+			<div id="loadImageDiv">
+				<button id="takePic">Câmera</button>
+				<input type="file" id="imageFileInput" />
+			</div>
+			<br/>
+			<div id="processImageDiv">
+				<button id="processImage">Checar Elegibilidade</button>
+			</div>
+		</div>
+	</div>
+
 	<!-- First, include the Webcam.js JavaScript Library -->
 	<script type="text/javascript" src="../webcam.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-	
 	<!-- Configure a few settings and attach camera -->
 	<script language="JavaScript">
 		Webcam.set({
@@ -97,29 +96,30 @@
 			image_format: 'jpeg',
 			jpeg_quality: 90
 		});
-		Webcam.attach( '#my_camera' );
+		// Webcam.attach('#my_camera'); --> Ativa a câmera. Descomente para funcionar!
 	</script>
-	
-		
+
 	<!-- Code to handle taking the snapshot and displaying it locally -->
 	<script language="JavaScript">
 		function take_snapshot() {
 			var settings = {};
 			// take snapshot and get image data
-			Webcam.snap( function(data_uri) {
+			Webcam.snap(function (data_uri) {
 				// display results in page
-				document.getElementById('results').innerHTML = 
-					'<h2>Here is your image:</h2>' + 
-					'<img src="'+ data_uri +'"/>';
+				document.getElementById('results').innerHTML =
+					'<h2>Aqui está sua imagem</h2>' +
+					'<img src="' + data_uri + '"/>';
 				var image = data_uri.replace(/^data:image\/(png|jpeg|jpg);base64,/, "");
-				
+
 				console.log(image);
 				console.log(data_uri);
 
 				settings = {
 					"async": true,
 					"crossDomain": true,
-					"data": { 'image' : image },
+					"data": {
+						'image': image
+					},
 					"dataType": "json",
 					"processData": true,
 					"url": "http://localhost:56242/Home/ProcessarImagemAsync",
@@ -127,24 +127,21 @@
 				}
 				//Log
 				console.log(settings);
-			} );
+			});
 
 			$.ajax(settings).done(function (response) {
 				console.log(response);
 
-		
-			document.getElementById("valueJsonName").value = JSON.stringify(response["Name"]);
-			document.getElementById("valueJsonCardNumber").value = JSON.stringify(response["CardNumber"]);
-			document.getElementById("valueJsonValidDate").value = JSON.stringify(response["ExpirationDate"]);
-			document.getElementById("valueJsonHealthInsurance").value = JSON.stringify(response["HealthInsurance"]);
-			document.getElementById("valueJsonLogo").value = JSON.stringify(response["Logo"]);
-			document.getElementById("valueJsonCompany").value = JSON.stringify(response["Company"]);
-			document.getElementById("valueJsonEligibilities").value = JSON.stringify(response["Eligibilities"]);
-							
-						
-			});	
+				document.getElementById("valueJsonName").value = JSON.stringify(response["Name"]);
+				document.getElementById("valueJsonCardNumber").value = JSON.stringify(response["CardNumber"]);
+				document.getElementById("valueJsonValidDate").value = JSON.stringify(response["ExpirationDate"]);
+				document.getElementById("valueJsonHealthInsurance").value = JSON.stringify(response["HealthInsurance"]);
+				document.getElementById("valueJsonLogo").value = JSON.stringify(response["Logo"]);
+				document.getElementById("valueJsonCompany").value = JSON.stringify(response["Company"]);
+				document.getElementById("valueJsonEligibilities").value = JSON.stringify(response["Eligibilities"]);
+			});
 		}
-		
 	</script>
 </body>
+
 </html>

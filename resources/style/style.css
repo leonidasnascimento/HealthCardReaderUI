@@ -1,0 +1,105 @@
+.bradesco {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 200px;
+}
+
+.sendImage {
+    width: 115px;
+    height: 23px;
+    margin-top: 100px;
+    margin-left: -124px;
+}
+
+.inputjson {
+    width: 32%;
+    margin-right: 80px;
+    height: 180px;
+    margin-top: 22px;
+}
+
+.sulamerica {
+    display: flex;
+    margin-left: 200px;
+    justify-content: space-between;
+}
+
+.cardInfos {
+    margin-left: 1%;
+}
+
+.list {
+    display: flex;
+    justify-content: space-between;
+    padding-right: 136px;
+}
+
+.inputCardInfos {
+    margin: 2px;
+}
+
+ul {
+    list-style-type: none
+}
+
+body {
+    font-family: Helvetica, sans-serif;
+}
+
+h2,
+h3 {
+    margin-top: 0;
+}
+
+form {
+    margin-top: 15px;
+}
+
+form>input {
+    margin-right: 15px;
+}
+
+#results {
+    float: right;
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid;
+    background: #ccc;
+}
+
+#imageDiv{
+    float: left;
+    width: 50%;    
+}
+
+#resultDiv{
+    float: right;
+    width: 50%;
+    text-align: left;
+}
+
+#mainDiv {
+    width: 70%;
+    padding-left: 15%;
+    padding-right: 15%;
+    padding-top: 5%;
+    padding-bottom: 5%;
+    height: 70%
+}
+
+#image_sulamerica {
+    width: 320px;
+    height: 238px;
+}
+
+#infoDiv{
+    width: 100%;
+    position: relative;    
+}
+
+#commandTools{
+    width: 100%;
+    position: absolute;
+    bottom: 0;  
+}
+
