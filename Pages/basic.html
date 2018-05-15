@@ -4,7 +4,8 @@
 
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title>Elegibilidade</title>
+    <title>Elegibilidade</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<link href="../resources/style/style.css" rel="stylesheet">
 	<link rel="icon" href="../resources/ico/acc.png">
 </head>
@@ -13,15 +14,32 @@
 	<div id="mainDiv">
 		<div id="infoDiv">
 			<div id="imageDiv">
-				<div id="camDiv" style="display: none">
-					<div id="my_camera"></div>
-
-					<!-- A button for taking snaps -->
-					<form>
-						<input type=button value="Take Snapshot" onClick="take_snapshot()">
-					</form>
-				</div>
-				<div id="results">Sua imagem aparecerá aqui...</div>
+				<div id="camDiv">
+                    <div class="container">
+                        <div class="modal fade" id="myModal" role="dialog">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h4 class="modal-title">Webcam</h4>
+                                    </div>
+                                    <div class="modal-body" >
+                                        <div id="my_camera"></div>
+                                        <form>
+                                            <input type=button value="Take Snapshot" onClick="take_snapshot()" data-dismiss="modal">
+                                        </form>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    </div>
+                                    </div>
+                                </div>    
+                            </div>        
+                        </div>            
+                    </div>
+                </div>
+                
+                <div id="results">Sua imagem aparecerá aqui...</div>
+                <img id="output" style="width: 50%"/>
 			</div>
 			<div id="resultDiv">
 				<section class="cardInfos">
@@ -74,8 +92,8 @@
 		</div>
 		<div id="commandTools">
 			<div id="loadImageDiv">
-				<button id="takePic">Câmera</button>
-				<input type="file" id="imageFileInput" />
+                <button id="takePic" data-toggle="modal" data-target="#myModal">Câmera</button>
+				<input type="file" id="imageFileInput" accept=".png, .jpg, .jpeg" onchange="loadFile(event)"/>
 			</div>
 			<br/>
 			<div id="processImageDiv">
@@ -87,7 +105,7 @@
 	<!-- First, include the Webcam.js JavaScript Library -->
 	<script type="text/javascript" src="../webcam.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<!-- Configure a few settings and attach camera -->
 	<script language="JavaScript">
 		Webcam.set({
@@ -96,7 +114,80 @@
 			image_format: 'jpeg',
 			jpeg_quality: 90
 		});
-		// Webcam.attach('#my_camera'); --> Ativa a câmera. Descomente para funcionar!
+		 Webcam.attach('#my_camera'); 
+	</script>
+    <script>
+        var loadFile = function(event) {
+          var output = document.getElementById('output');
+          output.src = URL.createObjectURL(event.target.files[0]);
+          document.getElementById('results').style.display = 'none';
+        };
+	</script>
+	<script>
+		document.getElementById('processImage').addEventListener('click', function() {
+			var files = document.getElementById('imageFileInput').files;
+			if (files.length > 0) {
+				getBase64(files[0]);
+			}
+		});	
+
+		function getBase64(file) {
+			var reader = new FileReader();
+			reader.readAsDataURL(file);
+			reader.onload = function () {
+				console.log(reader.result);
+				var image = reader.result.replace(/^data:image\/(png|jpeg|jpg);base64,/, "");
+				console.log(image);
+				console.log(reader.result);
+					settings = {
+						"async": true,
+						"crossDomain": true,
+						"data": {
+							'image': image
+						},
+						"dataType": "json",
+						"processData": true,
+						"url": "http://localhost:56242/Home/ProcessarImagemAsync",
+						"method": "POST"
+					}
+					//Log
+					console.log(settings);
+				
+				$.ajax(settings).done(function (response) {
+					console.log(response);
+						if(JSON.stringify(response["Name"]) === null || JSON.stringify(response["Name"]) === undefined)
+							document.getElementById("valueJsonName").value = " ";
+						else document.getElementById("valueJsonName").value = JSON.stringify(response["Name"]).replace("\"","");
+
+						if(JSON.stringify(response["CardNumber"]) === null || JSON.stringify(response["CardNumber"]) === undefined)
+							document.getElementById("valueJsonCardNumber").value = " ";
+						else document.getElementById("valueJsonCardNumber").value = JSON.stringify(response["CardNumber"]).replace("\"","");
+					
+						if(JSON.stringify(response["ExpirationDate"]) === null || JSON.stringify(response["ExpirationDate"]) === undefined)
+							document.getElementById("valueJsonValidDate").value = " ";
+						else document.getElementById("valueJsonValidDate").value = JSON.stringify(response["ExpirationDate"]).replace("\"","");
+
+						if(JSON.stringify(response["HealthInsurance"]) === null || JSON.stringify(response["HealthInsurance"]) === undefined)
+							document.getElementById("valueJsonHealthInsurance").value = " ";
+						else document.getElementById("valueJsonHealthInsurance").value = JSON.stringify(response["HealthInsurance"]).replace("\"","");
+					
+						if(JSON.stringify(response["Logo"]) === null || JSON.stringify(response["Logo"]) === undefined)
+							document.getElementById("valueJsonLogo").value = " ";
+						else document.getElementById("valueJsonLogo").value = JSON.stringify(response["Logo"]).replace("\"","");
+
+						if(JSON.stringify(response["Company"]) === null || JSON.stringify(response["Company"]) === undefined)
+							document.getElementById("valueJsonCompany").value = " ";
+						else document.getElementById("valueJsonCompany").value = JSON.stringify(response["Company"]).replace("\"","");
+
+						if(JSON.stringify(response["Eligibilities"]) === null || JSON.stringify(response["Eligibilities"]) === undefined)
+							document.getElementById("valueJsonEligibilities").value = " ";
+						else document.getElementById("valueJsonEligibilities").value = JSON.stringify(response["Eligibilities"]).replace("\"","");
+				});
+			};
+			reader.onerror = function (error) {
+				console.log('Error: ', error);
+			};
+			}
 	</script>
 
 	<!-- Code to handle taking the snapshot and displaying it locally -->
@@ -110,10 +201,8 @@
 					'<h2>Aqui está sua imagem</h2>' +
 					'<img src="' + data_uri + '"/>';
 				var image = data_uri.replace(/^data:image\/(png|jpeg|jpg);base64,/, "");
-
 				console.log(image);
 				console.log(data_uri);
-
 				settings = {
 					"async": true,
 					"crossDomain": true,
@@ -128,10 +217,8 @@
 				//Log
 				console.log(settings);
 			});
-
 			$.ajax(settings).done(function (response) {
 				console.log(response);
-
 				document.getElementById("valueJsonName").value = JSON.stringify(response["Name"]);
 				document.getElementById("valueJsonCardNumber").value = JSON.stringify(response["CardNumber"]);
 				document.getElementById("valueJsonValidDate").value = JSON.stringify(response["ExpirationDate"]);

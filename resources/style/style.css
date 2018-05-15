@@ -32,7 +32,7 @@
 .list {
     display: flex;
     justify-content: space-between;
-    padding-right: 136px;
+    padding-right: 320px;
 }
 
 .inputCardInfos {
@@ -62,7 +62,7 @@ form>input {
 }
 
 #results {
-    float: right;
+    float: left;
     margin: 20px;
     padding: 20px;
     border: 1px solid;
@@ -99,13 +99,19 @@ form>input {
 
 #infoDiv {
     width: 100%;
+}*/
+/* #commandTools{
+    display: flex;
+    margin-right: 50%;
 }
 
-#commandTools {
-    width: 100%;
+#loadImageDiv{
     position: absolute;
-    left: 0;
-    bottom: 0;
+	left: 50%;
+	top: 50%;
+    margin-top:-50px;
+    margin-left:-50px;
+
 } */
 
 #mainDiv,
@@ -114,10 +120,12 @@ form>input {
     position: relative;
     margin-top: 10px;
     display: inline-block;
+    
 }
 
 #infoDiv,
 #commandTools {
     width: 100%;
     clear: both;
+    
 }
