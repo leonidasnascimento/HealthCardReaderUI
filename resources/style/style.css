@@ -67,11 +67,15 @@ form>input {
     padding: 20px;
     border: 1px solid;
     background: #ccc;
+    text-align: center;
 }
 
 #imageDiv {
-    float: left;
     width: 50%;
+    text-align: right;
+    float: left;
+    padding-right: 30px;
+    padding-top: 12px;    
 }
 
 #resultDiv {
@@ -85,35 +89,6 @@ form>input {
     height: 238px;
 }
 
-/* #mainDiv {
-    width: 70%;
-    padding-left: 15%;
-    padding-right: 15%;
-    padding-top: 5%;
-    padding-bottom: 5%;
-    height: 70%;
-    position: relative;
-    height: 300px;
-    border: 1px solid black;
-}
-
-#infoDiv {
-    width: 100%;
-}*/
-/* #commandTools{
-    display: flex;
-    margin-right: 50%;
-}
-
-#loadImageDiv{
-    position: absolute;
-	left: 50%;
-	top: 50%;
-    margin-top:-50px;
-    margin-left:-50px;
-
-} */
-
 #mainDiv,
 #infoDiv,
 #commandTools {
@@ -125,7 +100,24 @@ form>input {
 
 #infoDiv,
 #commandTools {
-    width: 100%;
+    width: 90%;
     clear: both;
-    
+    text-align: center; 
+}
+
+#loadImageDiv
+{
+    width: 40%;
+    text-align: left;
+    float: right;
+    padding-left: 10px;
+}
+#processImageDiv {
+    width: 60%;
+    text-align: right;
+    float: left;
+}
+
+#processImageDiv > input[type=file] {
+    display: inline-flex;
 }
