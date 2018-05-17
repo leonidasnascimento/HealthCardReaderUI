@@ -24,9 +24,7 @@
 		"jpegcam"
 	],
 	"dependencies": {
-
+		"pure-css-loader": "^3.1.2"
 	},
-	"devDependencies": {
-		
-	}
+	"devDependencies": {}
 }

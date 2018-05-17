@@ -26,7 +26,7 @@
 									<div class="modal-body">
 										<div id="my_camera" style="display:block; margin-left:auto; margin-right:auto; width: 50%"></div>
 										<div class="modal-footer">
-											<button type=button class="btn btn-default" value="Take Snapshot" onClick="take_snapshot()" data-dismiss="modal">Capturar</button>
+											<button type=button class="btn btn-default" value="Take Snapshot" onClick="take_snapshot();showLoading()" data-dismiss="modal">Capturar</button>
 											<button type="button" class="btn btn-default" data-dismiss="modal" onclick="closeModal()">Fechar</button>
 										</div>
 									</div>
@@ -38,7 +38,7 @@
 
 				<div id="showImage">Sua imagem aparecerá aqui...</div>
 				<div id="results" style="margin-left: 44%;margin-top: -2%;margin-bottom: -11%"></div>
-				<img id="output" style="width: 50%; margin-top:14%" />
+				<img id="output" style="width: 50%; margin-top:4%; margin-left: 50%" />
 			</div>
 			<div id="resultDiv">
 				<section class="cardInfos">
@@ -98,9 +98,9 @@
 			</div>
 
 			<div id="processImageDiv">
-				<input type="file" id="imageFileInput" accept=".png, .jpg, .jpeg" onchange="loadFile(event)" />
-				<button id="processImage" onclick="teste()">Checar elegibilidade</button>
-				<div class="loader processImage is-active" id="loader" style="display:none">
+				<input type="file" id="imageFileInput" accept=".png, .jpg, .jpeg" onchange="loadFile(event)"/>
+				<button id="processImage" onclick="showLoading()">Checar elegibilidade</button>
+				<div id="loader" style="display:none">
 
 				</div>
 			</div>
@@ -113,8 +113,10 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<!-- Configure a few settings and attach camera -->
 	<script language="JavaScript">
-		function teste() {
+		function showLoading(){
 			document.getElementById("loader").style.display = "block";
+			document.getElementsByTagName("body")[0].style.background = "rgba(0,0,0,.85)";
+			document.getElementsByTagName("body")[0].style.zIndex = "1";
 		}
 		//Readiness events
 		document.getElementById('processImage').addEventListener('click', function () {
@@ -139,6 +141,8 @@
 			var output = document.getElementById('output');
 			output.src = URL.createObjectURL(event.target.files[0]);
 			document.getElementById('showImage').style.display = 'none';
+			document.getElementById("output").style.display = "block"; 
+			document.getElementById("results").style.display = "none"; 
 
 		};
 
@@ -174,10 +178,10 @@
 				undefined)
 				document.getElementById("valueJsonValidDate").value = " ";
 			else
-				document.getElementById("valueJsonValidDate").value = JSON.stringify(response["ExpirationDate"]).replace(
+				document.getElementById("valueJsonValidDate").value = parseDate(JSON.stringify(response["ExpirationDate"]).replace(
 					"\"", "").replace("\"",
-					"");
-
+					"").replace("T00:00:00", ""));
+				
 			if (JSON.stringify(response["HealthInsurance"]) === null || JSON.stringify(response["HealthInsurance"]) ===
 				undefined)
 				document.getElementById("valueJsonHealthInsurance").value = " ";
@@ -231,7 +235,7 @@
 				})
 				.fail(function (jqXHR, textStatus, errorThrown) {
 					alert(jqXHR.responseText);
-
+	
 					//Logs
 					console.log("###### LOG DE ERRO ######");
 					console.log(errorThrown);
@@ -243,13 +247,23 @@
 				});
 		}
 
+		function parseDate(dateVal){
+			var splitDate = dateVal.split('-');
+			var year = splitDate[0];
+			var month =splitDate[1];
+			var day =splitDate[2];
+			return day + "/" + month + "/" + year;
+			return splitDate;
+		}
+
 		function closeModal() {
 			location.reload(true);
 		}
 
 		function take_snapshot() {
 			console.log("Método 'take_snapshot'");
-			
+			document.getElementById("results").style.display = "block"; 
+			document.getElementById("output").style.display = "none"; 
 			// take snapshot and get image data
 			Webcam.snap(function (data_uri) {
 				// display results in page
