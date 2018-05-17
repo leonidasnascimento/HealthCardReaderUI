@@ -10,7 +10,7 @@
 	<link rel="icon" href="../resources/ico/acc.png">
 </head>
 
-<body >
+<body>
 	<div id="mainDiv">
 		<div id="infoDiv">
 			<div id="imageDiv">
@@ -21,13 +21,13 @@
 								<div class="modal-content">
 									<div class="modal-header">
 										<button type="button" class="close" data-dismiss="modal" onclick="closeModal()">&times;</button>
-										
+
 									</div>
 									<div class="modal-body">
 										<div id="my_camera" style="display:block; margin-left:auto; margin-right:auto; width: 50%"></div>
 										<div class="modal-footer">
-											<button type=button class="btn btn-default" value="Take Snapshot" onClick="take_snapshot()" data-dismiss="modal">Take Snapshot</button>
-											<button type="button" class="btn btn-default" data-dismiss="modal" onclick="closeModal()">Close</button>
+											<button type=button class="btn btn-default" value="Take Snapshot" onClick="take_snapshot()" data-dismiss="modal">Capturar</button>
+											<button type="button" class="btn btn-default" data-dismiss="modal" onclick="closeModal()">Fechar</button>
 										</div>
 									</div>
 								</div>
@@ -37,7 +37,7 @@
 				</div>
 
 				<div id="showImage">Sua imagem aparecerá aqui...</div>
-				<div id= "results" style="margin-left: 44%;margin-top: -2%;margin-bottom: -11%"></div>
+				<div id="results" style="margin-left: 44%;margin-top: -2%;margin-bottom: -11%"></div>
 				<img id="output" style="width: 50%; margin-top:14%" />
 			</div>
 			<div id="resultDiv">
@@ -96,12 +96,12 @@
 			<div id="loadImageDiv">
 				<button id="takePic" data-toggle="modal" data-target="#myModal" onclick="takePicClick()">Câmera</button>
 			</div>
-			
+
 			<div id="processImageDiv">
 				<input type="file" id="imageFileInput" accept=".png, .jpg, .jpeg" onchange="loadFile(event)" />
 				<button id="processImage" onclick="teste()">Checar elegibilidade</button>
-				<div class="loader processImage is-active" id="loader" style="display:none"> 
-				
+				<div class="loader processImage is-active" id="loader" style="display:none">
+
 				</div>
 			</div>
 		</div>
@@ -113,7 +113,7 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<!-- Configure a few settings and attach camera -->
 	<script language="JavaScript">
-		function teste(){
+		function teste() {
 			document.getElementById("loader").style.display = "block";
 		}
 		//Readiness events
@@ -125,50 +125,32 @@
 		});
 
 		function takePicClick() {
-			
-				Webcam.set({
+
+			Webcam.set({
 				width: 320,
 				height: 255,
 				image_format: 'jpeg',
 				jpeg_quality: 90
 			});
 			Webcam.attach('#my_camera');
-   			 }
-  
+		}
+
 		function loadFile(event) {
 			var output = document.getElementById('output');
 			output.src = URL.createObjectURL(event.target.files[0]);
 			document.getElementById('showImage').style.display = 'none';
-			
+
 		};
 
 		function getBase64(file) {
+
+			console.log("Método 'getBase64'");
+
 			var reader = new FileReader();
 			reader.readAsDataURL(file);
 			reader.onload = function () {
 				console.log(reader.result);
-				var image = reader.result.replace(/^data:image\/(png|jpeg|jpg);base64,/, "");
-				console.log(image);
-				console.log(reader.result);
-				settings = {
-					"async": true,
-					"crossDomain": true,
-					"data": {
-						'image': image
-					},
-					"dataType": "json",
-					"processData": true,
-					"url": "http://localhost:56242/Home/ProcessarImagemAsync",
-					"method": "POST"
-				}
-
-				//Log
-				console.log(settings);
-
-				$.ajax(settings).done(function (response) { //DONE
-					console.log(response);
-					readJson(response);
-				});
+				postImage(reader.result);
 			};
 		}
 
@@ -217,12 +199,48 @@
 				document.getElementById("valueJsonCompany").value = JSON.stringify(response["Company"]).replace("\"", "").replace(
 					"\"",
 					"");
-			document.getElementById("loader").style.display= "none";
-			//We won't get elegibility data for now!
-			// if(JSON.stringify(response["Eligibilities"]) === null || JSON.stringify(response["Eligibilities"]) === undefined)
-			// 	document.getElementById("valueJsonEligibilities").value = " ";
-			// else document.getElementById("valueJsonEligibilities").value = JSON.stringify(response["Eligibilities"]).replace("\"","");
-			console.log("DONE!");
+		}
+
+		function postImage(image) {
+			//Validations
+			if (image === null || image === undefined) return;
+
+			var imageAux = image.replace(/^data:image\/(png|jpeg|jpg);base64,/, "");
+
+			console.log(imageAux);
+
+			var settings = {
+				"async": true,
+				"crossDomain": true,
+				"data": {
+					'image': imageAux
+				},
+				"dataType": "json",
+				"processData": true,
+				"url": "http://localhost:56242/Home/ProcessarImagemAsync",
+				"method": "POST"
+			}
+
+			//Log
+			console.log(settings);
+
+			$.ajax(settings)
+				.done(function (response) {
+					console.log(response);
+					readJson(response);
+				})
+				.fail(function (jqXHR, textStatus, errorThrown) {
+					alert(jqXHR.responseText);
+
+					//Logs
+					console.log("###### LOG DE ERRO ######");
+					console.log(errorThrown);
+					console.log(textStatus);
+					console.log(jqXHR);
+				})
+				.always(function(){
+					document.getElementById("loader").style.display = "none";
+				});
 		}
 
 		function closeModal() {
@@ -230,35 +248,16 @@
 		}
 
 		function take_snapshot() {
-			var settings = {};
+			console.log("Método 'take_snapshot'");
+			
 			// take snapshot and get image data
 			Webcam.snap(function (data_uri) {
 				// display results in page
 				document.getElementById('results').innerHTML =
 					'<img src="' + data_uri + '"/>';
-					document.getElementById('showImage').style.display = 'none';
-				var image = data_uri.replace(/^data:image\/(png|jpeg|jpg);base64,/, "");
-				console.log(image);
-				console.log(data_uri);
-				settings = {
-					"async": true,
-					"crossDomain": true,
-					"data": {
-						'image': image
-					},
-					"dataType": "json",
-					"processData": true,
-					"url": "http://localhost:56242/Home/ProcessarImagemAsync",
-					"method": "POST"
-				}
-					
-				//Log
-				console.log(settings);
-			});
-			$.ajax(settings).done(function (response) {
-				console.log(response);
-				readJson(response);
-			});
+				document.getElementById('showImage').style.display = 'none';
+				postImage(data_uri);
+			})
 		}
 	</script>
 </body>
