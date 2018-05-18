@@ -115,8 +115,12 @@
 	<script language="JavaScript">
 		function showLoading(){
 			document.getElementById("loader").style.display = "block";
-			document.getElementsByTagName("body")[0].style.background = "rgba(0,0,0,.85)";
-			document.getElementsByTagName("body")[0].style.zIndex = "1";
+			// document.getElementsByTagName("body")[0].style.background = "rgba(0,0,0,.85)";
+			// document.getElementsByTagName("body")[0].style.zIndex = "-1";
+		}
+
+		function hideLoading(){
+			document.getElementById("loader").style.display = "none";
 		}
 		//Readiness events
 		document.getElementById('processImage').addEventListener('click', function () {
@@ -243,7 +247,7 @@
 					console.log(jqXHR);
 				})
 				.always(function(){
-					document.getElementById("loader").style.display = "none";
+					hideLoading();
 				});
 		}
 
