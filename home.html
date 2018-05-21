@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Elegibilidade</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="icon" href="assets/img/ico/acc.png">
+
+	<!-- Bootstrap core CSS     -->
+	<link href="assets/css/bootstrap.min.css" rel="stylesheet" />
+
+	<!-- Animation library for notifications   -->
+	<link href="assets/css/animate.min.css" rel="stylesheet" />
+
+	<!--  Paper Dashboard core CSS    -->
+	<link href="assets/css/paper-dashboard.css" rel="stylesheet" />
+
+	<!--  CSS for Demo Purpose, don't include it in your project     -->
+	<link href="assets/css/demo.css" rel="stylesheet" />
+
+	<!--  Fonts and icons     -->
+	<link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
+	<link href='https://fonts.googleapis.com/css?family=Muli:400,300' rel='stylesheet' type='text/css'>
+	<link href="assets/css/themify-icons.css" rel="stylesheet">
+	<link href="assets/css/style.css" rel="stylesheet">
+
+</head>
+
+<body class="main-panel">
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar bar1"></span>
+					<span class="icon-bar bar2"></span>
+					<span class="icon-bar bar3"></span>
+				</button>
+				<a class="navbar-brand" href="#">Validação de Elegibilidades</a>
+			</div>
+		</div>
+	</nav>
+	<div>
+		<div id="my_camera" style="display:block; margin-left:auto; margin-right:auto; width: 50%;margin-top:3%;margin-bottom: -15%"></div>
+		<div id="results" style="margin-left: 34%;margin-top: 3%;margin-bottom: -8%"></div>
+		<img id="output" onclick="showLoading()" style="width: 30%; margin-top:4%; margin-left: 35%;margin-bottom:-5%" />
+		<div id="loader" style="display:none"></div>
+	</div>
+	<div id="buttonImg">
+		<input type="file" id="imageFileInput" accept=".png, .jpg, .jpeg" onclick="showLoading()" onchange="loadFile(event)" />
+		<button type=button id="imageCapture" value="Take Snapshot" onClick="take_snapshot();showLoading()" style="margin-top: 4%;margin-left: 6%">Capturar</button>
+	</div>
+
+	<div class="content">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="card">
+						<div class="content table-responsive table-full-width">
+							<table class="table table-striped">
+								<tbody>
+									<tr>
+										<td id="inputCardTitle">Nome</td>
+										<td class="inputCardInfos" id="valueJsonName"></td>
+									</tr>
+									<tr>
+										<td id="inputCardTitle">Número do Cartão</td>
+										<td class="inputCardInfos" id="valueJsonCardNumber"></td>
+									</tr>
+									<tr>
+										<td id="inputCardTitle">Data da Validade</td>
+										<td class="inputCardInfos" id="valueJsonValidDate" />
+									</tr>
+									<tr>
+										<td id="inputCardTitle">Plano</td>
+										<td class="inputCardInfos" id="valueJsonHealthInsurance"></td>
+									</tr>
+									<tr>
+										<td id="inputCardTitle">Convênio</td>
+										<td class="inputCardInfos" id="valueJsonLogo" />
+									</tr>
+									<tr>
+										<td id="inputCardTitle">Empresa</td>
+										<td class="inputCardInfos" id="valueJsonCompany" />
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+
+	<footer class="footer">
+		<div class="container-fluid">
+			<div class="copyright pull-right">
+				&copy;
+				<script>
+					document.write(new Date().getFullYear())
+				</script>, powered by
+				<br/>
+				<img src="assets/img/accenture.png" class="imgAccenture">
+				<img src="assets/img/avanade.png" class="imgAvanade">
+			</div>
+		</div>
+	</footer>
+</body>
+
+<!--   Core JS Files   -->
+<script src="assets/js/jquery-1.10.2.js" type="text/javascript"></script>
+<script src="assets/js/bootstrap.min.js" type="text/javascript"></script>
+
+<!-- First, include the Webcam.js JavaScript Library -->
+<script type="text/javascript" src="assets/js/webcam.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!-- Configure a few settings and attach camera -->
+<script language="JavaScript">
+	Webcam.set({
+		width: 320,
+		height: 240,
+		image_format: 'jpeg',
+		jpeg_quality: 90
+	});
+	Webcam.attach('#my_camera');
+</script>
+<script language="JavaScript">
+	function showLoading() {
+		setTimeout(function () {
+			document.getElementById("loader").style.display = "block";
+		}, 700);
+	}
+
+	function hideLoading() {
+		document.getElementById("loader").style.display = "none";
+	}
+
+	function loadFile(event) {
+		var output = document.getElementById('output');
+		output.src = URL.createObjectURL(event.target.files[0]);
+		document.getElementById("output").style.display = "block";
+		document.getElementById("results").style.display = "none";
+		document.getElementById("my_camera").style.display = "none";
+
+		var files = document.getElementById('imageFileInput').files;
+		if (files.length > 0) {
+			getBase64(files[0]);
+		}
+	};
+
+	function getBase64(file) {
+
+		console.log("Método 'getBase64'");
+
+		var reader = new FileReader();
+		reader.readAsDataURL(file);
+		reader.onload = function () {
+			console.log(reader.result);
+			postImage(reader.result);
+		};
+	}
+
+	function readJson(response) {
+		if (response === null || response === undefined) return;
+
+		if (JSON.stringify(response["Name"]) === null || JSON.stringify(response["Name"]) === undefined)
+			document.getElementById("valueJsonName").innerText = " ";
+		else
+			document.getElementById("valueJsonName").innerText = JSON.stringify(response["Name"]).replace("\"", "").replace(
+				"\"", "");
+
+		if (JSON.stringify(response["CardNumber"]) === null || JSON.stringify(response["CardNumber"]) === undefined)
+			document.getElementById("valueJsonCardNumber").innerText = " ";
+		else
+			document.getElementById("valueJsonCardNumber").innerText = JSON.stringify(response["CardNumber"]).replace("\"",
+				"").replace("\"",
+				"");
+
+		if (JSON.stringify(response["ExpirationDate"]) === null || JSON.stringify(response["ExpirationDate"]) ===
+			undefined)
+			document.getElementById("valueJsonValidDate").innerText = " ";
+		else
+			document.getElementById("valueJsonValidDate").innerText = parseDate(JSON.stringify(response["ExpirationDate"]).replace(
+				"\"", "").replace("\"",
+				"").replace("T00:00:00", ""));
+
+		if (JSON.stringify(response["HealthInsurance"]) === null || JSON.stringify(response["HealthInsurance"]) ===
+			undefined)
+			document.getElementById("valueJsonHealthInsurance").innerText = " ";
+		else
+			document.getElementById("valueJsonHealthInsurance").innerText = JSON.stringify(response["HealthInsurance"]).replace(
+				"\"", "").replace("\"",
+				"");
+
+		if (JSON.stringify(response["Logo"]) === null || JSON.stringify(response["Logo"]) === undefined)
+			document.getElementById("valueJsonLogo").innerText = " ";
+		else
+			document.getElementById("valueJsonLogo").innerText = JSON.stringify(response["Logo"]).replace("\"", "").replace(
+				"\"",
+				"");
+
+		if (JSON.stringify(response["Company"]) === null || JSON.stringify(response["Company"]) === undefined)
+			document.getElementById("valueJsonCompany").innerText = " ";
+		else
+			document.getElementById("valueJsonCompany").innerText = JSON.stringify(response["Company"]).replace("\"", "").replace(
+				"\"",
+				"");
+	}
+
+	function postImage(image) {
+		//Validations
+		if (image === null || image === undefined) return;
+
+		var imageAux = image.replace(/^data:image\/(png|jpeg|jpg);base64,/, "");
+
+		console.log(imageAux);
+
+		var settings = {
+			"async": true,
+			"crossDomain": true,
+			"data": {
+				'image': imageAux
+			},
+			"dataType": "json",
+			"processData": true,
+			//Azure service
+			"url": "https://healthcardreader-api-accenture.azurewebsites.net/Home/ProcessarImagemAsync",
+			//Local service 
+			// "url": "http://localhost:56242/Home/ProcessarImagemAsync",
+			"method": "POST"
+		}
+
+		//Log
+		console.log(settings);
+
+		$.ajax(settings)
+			.done(function (response) {
+				console.log(response);
+				readJson(response);
+			})
+			.fail(function (jqXHR, textStatus, errorThrown) {
+				alert(jqXHR.responseText);
+
+				//Logs
+				console.log("###### LOG DE ERRO ######");
+				console.log(errorThrown);
+				console.log(textStatus);
+				console.log(jqXHR);
+			})
+			.always(function () {
+				hideLoading();
+			});
+	}
+
+	function parseDate(dateVal) {
+		var splitDate = dateVal.split('-');
+		var year = splitDate[0];
+		var month = splitDate[1];
+		var day = splitDate[2];
+		return day + "/" + month + "/" + year;
+		return splitDate;
+	}
+
+	function closeModal() {
+		location.reload(true);
+	}
+
+	function take_snapshot() {
+		console.log("Método 'take_snapshot'");
+		document.getElementById("results").style.display = "block";
+		document.getElementById("output").style.display = "none";
+		// take snapshot and get image data
+		Webcam.snap(function (data_uri) {
+			// display results in page
+			document.getElementById('results').innerHTML =
+				'<img src="' + data_uri + '"/>';
+			postImage(data_uri);
+		})
+		document.getElementById("my_camera").style.display = "none";
+	}
+</script>
+
+
+</html>
