@@ -32,6 +32,9 @@
     #imageCapture{
         margin-left: 18% !important;
     }
+    #imageFileInput{
+        display: none;
+    }
    
     
 }
